@@ -12,6 +12,7 @@ resource "google_project_service" "artifact" {
     depends_on = [ google_project_service.ressource_manager ]
 }
 
+
 resource "google_sql_database" "my-sql-instance" {
   name = "word_press"
   instance = "main-instance"

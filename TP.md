@@ -232,6 +232,20 @@ Notre but, ne l'oublions pas est de déployer wordpress sur Cloud Run !
    1. Véirifer la présence de l'entrée `No 'wp-config.php' found in /var/www/html, but 'WORDPRESS_...' variables supplied; copying 'wp-config-docker.php' (WORDPRESS_DB_HOST WORDPRESS_DB_PASSWORD WORDPRESS_DB_USER)`
    2. Au bout de 5 min, que se passe-t-il ? 🤯🤯🤯
    3. Regarder le resultat de votre commande `terraform apply` et observer les logs de Cloud Run
+   	
+   L'erreur que j'ai eu eu avec terrafrom apply:
+
+   google_cloud_run_service.default: Still creating... [10m0s elapsed]
+╷
+│ Error: Error waiting to create Service: resource is in failed state "Ready:False", message: Revision 'serveur-wordpress-00001-tfc' is not ready and cannot serve traffic. Google Cloud Run Service Agent service-372982299978@serverless-robot-prod.iam.gserviceaccount.com must have permission to read the image, us-docker.pkg.dev/cloudrun/ca0f0e4e04a6/sql-db:0.1. Ensure that the provided container image URL is correct and that the above account has permission to access the image. If you just enabled the Cloud Run API, the permissions might take a few minutes to propagate. Note that the image is from project [cloudrun], which is not the same as this project [devops-400218]. Permission must be granted to the Google Cloud Run Service Agent service-372982299978@serverless-robot-prod.iam.gserviceaccount.com from this project.
+│ 
+│   with google_cloud_run_service.default,
+│   on main.tf line 44, in resource "google_cloud_run_service" "default":
+│   44: resource "google_cloud_run_service" "default" {
+│ 
+╵
+
+
    4. Quelle est la raison de l'erreur ? Que faut-il changer dans les paramètre de notre ressource terraform `google_cloud_run_service` ?
 
 3. A l'aide de la documentation terraform, d'internet ou de ChatGPT, ou même d'un certain TP 😌 faites en sorte que Cloud Run soit correctement configuré pour utiliser votre image Docker wordpress.
