@@ -1,0 +1,9 @@
+steps:
+  - id: 'build docker image'
+    name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'us-central1-docker.pkg.dev/devops-400218/website-tools/sql-db:0.1', '.']
+    dir: .  
+
+  - id: 'push docker image to Artifact Registry'
+    name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'us-central1-docker.pkg.dev/devops-400218/website-tools/sql-db:0.1'] 

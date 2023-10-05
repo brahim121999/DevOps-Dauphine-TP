@@ -60,20 +60,85 @@ Wordpress dispose d'une image Docker officielle disponible sur [DockerHub](https
 
 2. Lancer l'image docker et ouvrez un shell à l'intérieur de votre container:
    1. Quel est le répertoire courant du container (WORKDIR) ?
-   2. Que contient le fichier `index.php` ?
+ 
+   braahim_braham@cloudshell:~/DevOps-Dauphine-TP (devops-400218)$ docker exec -it e768bda5fcbb bash
+   root@e768bda5fcbb:/var/www/html# ls
+ 
+   2. Que contient le fichier `index.php` ? 
+
+   Ce fichier définit la constante WP\_USE\_THEMES à true, ce qui dit à WordPress de charger le thème WordPress et de le rendre disponible puis il charge l'environnement WordPress et le fichier 
+   wp-blog-header.php, qui est responsable du chargement du thème WordPress, de la gestion des requêtes HTTP et de l'initialisation de WordPress.
+   Pour résumer ce fichier définit l'application wordpress.
+
 
 3. Supprimez le container puis relancez en un en spécifiant un port binding (une correspondance de port).
 
    1. Vous devez pouvoir communiquer avec le port par défaut de wordpress : **80** (choisissez un port entre 8000 et 9000 sur votre machine hôte => cloudshell)
 
    2. Avec la commande `curl`, faites une requêtes depuis votre machine hôte à votre container wordpress. Quelle est la réponse ? (il n'y a pas piège, essayez sur un port non utilisé pour constater la différence)
+   
+   $ curl http://0.0.0.0:8000 => nous permet de visualiser la page d'acceuil de l'application web  
 
-   3. Afficher les logs de votre container après avoir fait quelques requêtes, que voyez vous ?
-   4. Utilisez l'aperçu web pour afficher le résultat du navigateur qui se connecte à votre container wordpress
+   $ curl http://0.0.0.0:9000    => curl: (7) Failed to connect to 0.0.0.0 port 9000: Connection refused
+  
+
+ 3. Afficher les logs de votre container après avoir fait quelques requêtes, que voyez vous ?
+
+braahim_braham@cloudshell:~/DevOps-Dauphine-TP (devops-400218)$ docker logs 1fa
+
+WordPress not found in /var/www/html - copying now...
+Complete! WordPress has been successfully copied to /var/www/html
+AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 172.18.0.2. Set the 'ServerName' directive globally to suppress this message
+AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 172.18.0.2. Set the 'ServerName' directive globally to suppress this message
+[Thu Oct 05 08:37:25.187763 2023] [mpm_prefork:notice] [pid 1] AH00163: Apache/2.4.56 (Debian) PHP/8.0.30 configured -- resuming normal operations
+[Thu Oct 05 08:37:25.188152 2023] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
+172.18.0.1 - - [05/Oct/2023:08:37:46 +0000] "GET / HTTP/1.1" 302 233 "-" "curl/7.74.0"
+172.18.0.1 - - [05/Oct/2023:08:37:54 +0000] "GET / HTTP/1.1" 302 233 "-" "curl/7.74.0"
+172.18.0.1 - - [05/Oct/2023:08:38:05 +0000] "GET / HTTP/1.1" 302 233 "-" "curl/7.74.0"
+172.18.0.1 - - [05/Oct/2023:08:38:09 +0000] "GET /?authuser=0&redirectedPreviously=true HTTP/1.1" 302 235 "https://ssh.cloud.google.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36"
+172.18.0.1 - - [05/Oct/2023:08:38:09 +0000] "GET /wp-admin/setup-config.php HTTP/1.1" 200 4474 "https://ssh.cloud.google.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36"
+172.18.0.1 - - [05/Oct/2023:08:38:14 +0000] "GET /favicon.ico HTTP/1.1" 302 235 "https://8000-cs-96ac1161-75a8-4011-a65b-d3de1906536e.cs-europe-west1-iuzs.cloudshell.dev/wp-admin/setup-config.php" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36"
+172.18.0.1 - - [05/Oct/2023:08:38:14 +0000] "GET /wp-admin/setup-config.php HTTP/1.1" 200 4474 "https://8000-cs-96ac1161-75a8-4011-a65b-d3de1906536e.cs-europe-west1-iuzs.cloudshell.dev/wp-admin/setup-config.php" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36"
+172.18.0.1 - - [05/Oct/2023:08:38:19 +0000] "POST /wp-admin/setup-config.php?step=0 HTTP/1.1" 200 1492 "https://8000-cs-96ac1161-75a8-4011-a65b-d3de1906536e.cs-europe-west1-iuzs.cloudshell.dev/wp-admin/setup-config.php" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36"
+172.18.0.1 - - [05/Oct/2023:08:38:25 +0000] "GET /favicon.ico HTTP/1.1" 302 235 "https://8000-cs-96ac1161-75a8-4011-a65b-d3de1906536e.cs-europe-west1-iuzs.cloudshell.dev/wp-admin/setup-config.php?step=0" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36"
+172.18.0.1 - - [05/Oct/2023:08:38:25 +0000] "GET /wp-admin/setup-config.php HTTP/1.1" 200 4479 "https://8000-cs-96ac1161-75a8-4011-a65b-d3de1906536e.cs-europe-west1-iuzs.cloudshell.dev/wp-admin/setup-config.php?step=0" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36"
+172.18.0.1 - - [05/Oct/2023:08:39:34 +0000] "GET /wp-admin/setup-config.php?step=1&language=fr_FR HTTP/1.1" 200 1913 "https://8000-cs-96ac1161-75a8-4011-a65b-d3de1906536e.cs-europe-west1-iuzs.cloudshell.dev/wp-admin/setup-config.php?step=0" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36"
+172.18.0.1 - - [05/Oct/2023:08:39:40 +0000] "GET /favicon.ico HTTP/1.1" 302 235 "https://8000-cs-96ac1161-75a8-4011-a65b-d3de1906536e.cs-europe-west1-iuzs.cloudshell.dev/wp-admin/setup-config.php?step=1&language=fr_FR" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36"
+172.18.0.1 - - [05/Oct/2023:08:39:40 +0000] "GET /wp-admin/setup-config.php HTTP/1.1" 200 4479 "https://8000-cs-96ac1161-75a8-4011-a65b-d3de1906536e.cs-europe-west1-iuzs.cloudshell.dev/wp-admin/setup-config.php?step=1&language=fr_FR" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36"
+172.18.0.1 - - [05/Oct/2023:08:42:19 +0000] "POST /wp-admin/setup-config.php?step=2 HTTP/1.1" 500 3892 "https://8000-cs-96ac1161-75a8-4011-a65b-d3de1906536e.cs-europe-west1-iuzs.cloudshell.dev/wp-admin/setup-config.php?step=1&language=fr_FR" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36"
+172.18.0.1 - - [05/Oct/2023:08:42:19 +0000] "GET /favicon.ico HTTP/1.1" 302 235 "https://8000-cs-96ac1161-75a8-4011-a65b-d3de1906536e.cs-europe-west1-iuzs.cloudshell.dev/wp-admin/setup-config.php?step=2" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36"
+172.18.0.1 - - [05/Oct/2023:08:42:19 +0000] "GET /wp-admin/setup-config.php HTTP/1.1" 200 4479 "https://8000-cs-96ac1161-75a8-4011-a65b-d3de1906536e.cs-europe-west1-iuzs.cloudshell.dev/wp-admin/setup-config.php?step=2" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36"
+172.18.0.1 - - [05/Oct/2023:08:42:24 +0000] "GET /favicon.ico HTTP/1.1" 302 235 "https://8000-cs-96ac1161-75a8-4011-a65b-d3de1906536e.cs-europe-west1-iuzs.cloudshell.dev/wp-admin/setup-config.php?step=1&language=fr_FR" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36"
+172.18.0.1 - - [05/Oct/2023:08:42:24 +0000] "GET /wp-admin/setup-config.php HTTP/1.1" 200 4479 "https://8000-cs-96ac1161-75a8-4011-a65b-d3de1906536e.cs-europe-west1-iuzs.cloudshell.dev/wp-admin/setup-config.php?step=1&language=fr_FR" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36"
+172.18.0.1 - - [05/Oct/2023:08:42:44 +0000] "POST /wp-admin/setup-config.php?step=2 HTTP/1.1" 500 3892 "https://8000-cs-96ac1161-75a8-4011-a65b-d3de1906536e.cs-europe-west1-iuzs.cloudshell.dev/wp-admin/setup-config.php?step=1&language=fr_FR" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36"
+172.18.0.1 - - [05/Oct/2023:08:42:44 +0000] "GET /favicon.ico HTTP/1.1" 302 235 "https://8000-cs-96ac1161-75a8-4011-a65b-d3de1906536e.cs-europe-west1-iuzs.cloudshell.dev/wp-admin/setup-config.php?step=2" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36"
+172.18.0.1 - - [05/Oct/2023:08:42:44 +0000] "GET /wp-admin/setup-config.php HTTP/1.1" 200 4479 "https://8000-cs-96ac1161-75a8-4011-a65b-d3de1906536e.cs-europe-west1-iuzs.cloudshell.dev/wp-admin/setup-config.php?step=2" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36"
+172.18.0.1 - - [05/Oct/2023:08:42:46 +0000] "GET /favicon.ico HTTP/1.1" 302 235 "https://8000-cs-96ac1161-75a8-4011-a65b-d3de1906536e.cs-europe-west1-iuzs.cloudshell.dev/wp-admin/setup-config.php?step=1&language=fr_FR" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36"
+172.18.0.1 - - [05/Oct/2023:08:42:46 +0000] "GET /wp-admin/setup-config.php HTTP/1.1" 200 4479 "https://8000-cs-96ac1161-75a8-4011-a65b-d3de1906536e.cs-europe-west1-iuzs.cloudshell.dev/wp-admin/setup-config.php?step=1&language=fr_FR" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36"
+172.18.0.1 - - [05/Oct/2023:08:43:26 +0000] "POST /wp-admin/setup-config.php?step=2 HTTP/1.1" 500 3895 "https://8000-cs-96ac1161-75a8-4011-a65b-d3de1906536e.cs-europe-west1-iuzs.cloudshell.dev/wp-admin/setup-config.php?step=1&language=fr_FR" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36"
+172.18.0.1 - - [05/Oct/2023:08:43:26 +0000] "GET /favicon.ico HTTP/1.1" 302 235 "https://8000-cs-96ac1161-75a8-4011-a65b-d3de1906536e.cs-europe-west1-iuzs.cloudshell.dev/wp-admin/setup-config.php?step=2" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36"
+172.18.0.1 - - [05/Oct/2023:08:43:26 +0000] "GET /wp-admin/setup-config.php HTTP/1.1" 200 4479 "https://8000-cs-96ac1161-75a8-4011-a65b-d3de1906536e.cs-europe-west1-iuzs.cloudshell.dev/wp-admin/setup-config.php?step=2" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36"
+172.18.0.1 - - [05/Oct/2023:08:43:29 +0000] "GET /favicon.ico HTTP/1.1" 302 235 "https://8000-cs-96ac1161-75a8-4011-a65b-d3de1906536e.cs-europe-west1-iuzs.cloudshell.dev/wp-admin/setup-config.php?step=1&language=fr_FR" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36"
+172.18.0.1 - - [05/Oct/2023:08:43:29 +0000] "GET /wp-admin/setup-config.php HTTP/1.1" 200 4479 "https://8000-cs-96ac1161-75a8-4011-a65b-d3de1906536e.cs-europe-west1-iuzs.cloudshell.dev/wp-admin/setup-config.php?step=1&language=fr_FR" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36"
+172.18.0.1 - - [05/Oct/2023:08:46:17 +0000] "GET / HTTP/1.1" 302 233 "-" "curl/7.74.0"
+172.18.0.1 - - [05/Oct/2023:08:46:37 +0000] "GET /?authuser=0 HTTP/1.1" 302 235 "https://shell.cloud.google.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36"
+172.18.0.1 - - [05/Oct/2023:08:46:37 +0000] "GET /wp-admin/setup-config.php HTTP/1.1" 200 4479 "https://shell.cloud.google.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36"
+172.18.0.1 - - [05/Oct/2023:08:47:45 +0000] "GET /?authuser=0 HTTP/1.1" 302 235 "https://shell.cloud.google.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36"
+172.18.0.1 - - [05/Oct/2023:08:47:45 +0000] "GET /wp-admin/setup-config.php HTTP/1.1" 200 4479 "https://shell.cloud.google.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36"
+172.18.0.1 - - [05/Oct/2023:08:47:50 +0000] "GET /favicon.ico HTTP/1.1" 302 235 "https://8000-cs-96ac1161-75a8-4011-a65b-d3de1906536e.cs-europe-west1-iuzs.cloudshell.dev/wp-admin/setup-config.php" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36"
+172.18.0.1 - - [05/Oct/2023:08:47:50 +0000] "GET /wp-admin/setup-config.php HTTP/1.1" 200 4479 "https://8000-cs-96ac1161-75a8-4011-a65b-d3de1906536e.cs-europe-west1-iuzs.cloudshell.dev/wp-admin/setup-config.php" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36"	
+
+
+=> On voit bien les requêtes GET
+
+ 4. Utilisez l'aperçu web pour afficher le résultat du navigateur qui se connecte à votre container wordpress
       1. Utiliser la fonction `Aperçu sur le web`
         ![web_preview](images/wordpress_preview.png)
       2. Modifier le port si celui choisi n'est pas `8000`
       3. Une fenètre s'ouvre, que voyez vous ?
+
+      Je vois une page de connexion à la base de données.
+
 
 4. A partir de la documentation, remarquez les paramètres requis pour la configuration de la base de données.
 
