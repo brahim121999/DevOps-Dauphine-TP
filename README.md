@@ -1,6 +1,6 @@
 # Préparation du TP
 
-## Préambule
+## Préambule-IB
 
 Pour la réalisation de ce TP, vous utiliserez Cloud Shell et GitHub comme pour les sessions de cours précédentes.
 
